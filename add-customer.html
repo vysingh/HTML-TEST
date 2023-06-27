@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>ADD CUSTOMER</title>          
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">   
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <style>
+
+        .width-custom {
+            width: 650px;
+        }
+    </style>
+    <body>
+        <div class="container width-custom border border-2 shadow-lg bg-body-tertiary rounded my-5">
+            <h1 class="text-center mt-4">Create A New Customer</h1>
+          
+            <form action="#">
+              <div class="form-group row my-3">
+                <label for="name" class="col-md-3 col-form-label">Name</label> 
+                <div class="col-md-9">
+                  <input type="text" id="name" name="name" class="form-control">
+                </div>
+              </div>
+          
+              <div class="form-group row my-3">
+                <label for="tel" class="col-md-3 col-form-label">Mobile</label>
+                <div class="col-md-9">
+                  <input type="tel" id="tel" name="tel" class="form-control">
+                </div>
+              </div>
+          
+              <div class="form-group row my-3">
+                <label for="email" class="col-md-3 col-form-label">Email</label>
+                <div class="col-md-9">
+                  <input type="email" id="email" name="email" class="form-control">
+                </div>
+              </div>
+          
+              <div class="form-group row my-3">
+                <label for="address" class="col-md-3 col-form-label">Address</label>
+                <div class="col-md-9">
+                  <input type="text" id="address" name="address" class="form-control">
+                </div>
+              </div>
+          
+              <div class="form-group row my-3">
+                <label for="number" class="col-md-3 col-form-label">Age</label>
+                <div class="col-md-9">
+                  <input type="number" id="age" name="age" class="form-control">
+                </div>
+              </div>
+          
+              <div class="form-group row my-3">
+                <label for="gender" class="col-md-3 col-form-label">Gender</label>
+                <div class="col-md-9">
+                  <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="male" value="male">
+                    <label class="form-check-label" for="male">Male</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="female" value="female">
+                    <label class="form-check-label" for="female">Female</label>
+                  </div>
+                </div>
+              </div>
+          
+              <div class="form-group row my-3">
+                <label for="province-city" class="col-md-3 col-form-label">Province/City</label>
+                <div class="col-md-9">
+                  <select class="form-control" id="province-city">
+                    <option>- Please Choose -</option>
+                  </select>
+                </div>
+              </div> 
+          
+              <div class="form-group text-center mt-3">
+                <button type="submit" class="btn btn-primary mb-3">Submit</button>
+              </div>
+            </form>
+          </div>
+          
+          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+          <script>
+            function validateAndSubmit(event) {
+                event.preventDefault();
+
+                const form = document.querySelector('form');
+                const nameInput = document.querySelector('#name');
+                const mobileInput = document.querySelector('#tel');
+                const emailInput = document.querySelector('#email');
+                const ageInput = document.querySelector('#age');
+                const genderInputs = document.querySelectorAll('input[name="gender"]');
+                const provinceInput = document.querySelector('#province-city');
+
+                const name = nameInput.value.trim();
+                const mobile = mobileInput.value.trim();
+                const email = emailInput.value.trim();
+                const age = ageInput.value;
+                const genderInput = document.querySelector('input[name="gender"]:checked');
+                const gender = genderInput ? genderInput.value : undefined;
+                const province = provinceInput.value;
+
+                if (name === '' || mobile === '' || email === '' || age === '' || gender === undefined) {
+                    alert('Vui lòng điền thông tin.');
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    alert('Vui lòng điền email.');
+                    return;
+                }
+
+                if (!isValidMobile(mobile)) {
+                    alert('Vui lòng điền số điện thoại.');
+                    return;
+                }
+
+                if (!isValidAge(age)) {
+                    alert('Vui lòng điền tuổi.');
+                    return;
+                }
+
+                const customer = {
+                    name,
+                    mobile,
+                    email,
+                    age,
+                    gender,
+                    province
+                };
+
+                let customers = JSON.parse(localStorage.getItem('customers')) || [];
+                customers.push(customer);
+                localStorage.setItem('customers', JSON.stringify(customers));
+                alert('Customer created successfully.');
+                form.reset();
+                }
+
+                function isValidEmail(email) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(email);
+                }
+
+                function isValidMobile(mobile) {
+                    const mobileRegex = /^[0-9]{10}$/;
+                    return mobileRegex.test(mobile);
+                }
+
+                function isValidAge(age) {
+                    const ageNumber = parseInt(age);
+                    return !isNaN(ageNumber) && ageNumber >= 18 && ageNumber <= 100;
+                }
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    const form = document.querySelector('form');
+                    form.addEventListener('submit', validateAndSubmit);
+                    // if (typeof (Storage) != "undefined") {
+                    // console.log("Có hỗ trợ");
+                    // const customers = JSON.parse(localStorage.getItem('customers')) || [];
+                    // console.log(customers);
+                    // } else {
+                    // console.log("Không hỗ trợ");
+                    // }
+                });
+          </script>
+    </body>
+    </html>
